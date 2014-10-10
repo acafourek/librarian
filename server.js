@@ -54,7 +54,14 @@ router.get('/', function(req, res) {
 	.post(function(req, res) {
 		
 		var item = new Book(); 		// create a new instance of the Item model
-		item.title = req.body.title;  // set the item title (comes from the request)
+		
+		var body = req.body;	
+		for(var key in body) { 		//iterate through the call and build the item record
+		   if (body.hasOwnProperty(key)) {
+		   		item[key] = body[key];
+		   }
+		}
+		console.log(item);
 
 		// save the item and check for errors
 		item.save(function(err) {
