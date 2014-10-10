@@ -39,7 +39,23 @@ router.get('/', function(req, res) {
 });
 
 // more routes for our API will happen here
+	router.route('/item')
 
+	// create an item (accessed at POST http://localhost:8080/api/items)
+	.post(function(req, res) {
+		
+		var item = new Book(); 		// create a new instance of the Item model
+		item.title = req.body.title;  // set the item title (comes from the request)
+
+		// save the item and check for errors
+		item.save(function(err) {
+			if (err)
+				res.send(err);
+
+			res.json({ message: 'Item created!' });
+		});
+		
+	});
 // REGISTER OUR ROUTES -------------------------------
 // all of our routes will be prefixed with /api
 app.use('/api', router);
