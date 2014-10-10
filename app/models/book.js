@@ -27,7 +27,6 @@ var VolSchema = new Schema({
 	});
 
 var ItemSchema   = new Schema({
-	id: mongoose.Schema.Types.ObjectId,					//Unique catalog ID
 	title:  String,					//Book Title
 	authors: [AuthorSchema],		//Author Array
 	contributors: [AuthorSchema],	//Contrib Array
