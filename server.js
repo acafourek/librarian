@@ -61,7 +61,6 @@ router.get('/', function(req, res) {
 		   		item[key] = body[key];
 		   }
 		}
-		console.log(item);
 
 		// save the item and check for errors
 		item.save(function(err) {
@@ -89,11 +88,27 @@ router.get('/', function(req, res) {
 
 	// get the item with that id (accessed at GET http://localhost:8080/api/items/:id)
 	.get(function(req, res) {
-		Book.findById(req.params.id, function(err, item) {
-			if (err)
-				res.send(err);
-			res.json(item);
-		});
+		var ids = req.params.id.split(",");
+
+		var found = [];
+		var errors = [];
+		//iterate through all passed ids in order to fetch them
+		for (var i = 0; i < ids.length; i++) {
+			Book.findById(ids[i], function(err, item) {
+				if (err)
+					errors.push(err);
+				found.push(item); 
+				
+				if(i == found.length){
+					var result = {
+						'message': found.length+' Items found',
+						'Items': found, 
+						'Errors:': errors
+					};
+					res.json(result);
+				}			
+			});
+		}
 	})
 	
 	// update the item with this id (accessed at PUT http://localhost:8080/api/items/:id)
