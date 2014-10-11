@@ -90,25 +90,13 @@ router.get('/', function(req, res) {
 	.get(function(req, res) {
 		var ids = req.params.id.split(",");
 
-		var found = [];
-		var errors = [];
-		//iterate through all passed ids in order to fetch them
-		for (var i = 0; i < ids.length; i++) {
-			Book.findById(ids[i], function(err, item) {
-				if (err)
-					errors.push(err);
-				found.push(item); 
-				
-				if(i == found.length){
-					var result = {
-						'message': found.length+' Items found',
-						'Items': found, 
-						'Errors:': errors
-					};
-					res.json(result);
-				}			
-			});
-		}
+		Book.find({
+		    '_id': { $in: ids}
+		}, function(err, items){
+			if (err)
+				res.send(err);
+			res.json(items);
+		});
 	})
 	
 	// update the item with this id (accessed at PUT http://localhost:8080/api/items/:id)
@@ -135,31 +123,21 @@ router.get('/', function(req, res) {
 	
 	// delete the item with this id (accessed at DELETE http://localhost:8080/api/items/:id)
 	.delete(function(req, res) {
-		var ids = req.params.id.split(",");
+		var ids = req.params.id.split(",");		
 
-		var deleted = [];
-		var errors = [];
-		//iterate through all passed ids in order to delete them
-		for (var i = 0; i < ids.length; i++) {
-			Book.remove({
-				_id: ids[i]
-			}, function(err, item) {
-				if (err)
-					errors.push(err);
-				deleted.push(ids[i]); 
-				
-				if(i == ids.length){
-					var result = {
-						'message': deleted.length+' Records deleted',
-						'Deleted': deleted, 
-						'Errors:': errors
-					};
-					res.json(result);
-				}
-								
-			});
-		}		
+		Book.remove({
+		    '_id': { $in: ids}
+		}, function(err, result){
+			if (err)
+				res.send(err);
+			var response = {
+				'message': 'Items deleted.',
+				'items': 	ids
+			}
+			res.json(response);
+		});
 	});
+	
 // REGISTER OUR ROUTES -------------------------------
 // all of our routes will be prefixed with /api
 app.use('/api/v1', router);
