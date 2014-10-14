@@ -50,7 +50,10 @@ router.get('/', function(req, res) {
 	//API METHODS FOR GENERAL ITEMS
 	router.route('/items')
 
-	// create an item (accessed at POST http://localhost:8080/api/items)
+/***
+	CREATE ITEM
+	- POST api/v1/items
+**/
 	.post(function(req, res) {
 		
 		var item = new Book(); 		// create a new instance of the Item model
@@ -72,8 +75,11 @@ router.get('/', function(req, res) {
 		});
 		
 	})
-	
-	// get all the books (accessed at GET http://localhost:8080/api/items)
+
+/***
+	GET ALL ITEMS
+	- GET api/v1/items
+**/	
 	.get(function(req, res) {
 		Book.find(function(err, items) {
 			if (err)
@@ -83,10 +89,16 @@ router.get('/', function(req, res) {
 		});
 	});
 	
-	///METHIDS FOR SINGLE ITEMS
+/***
+	SINGLE ITEMS
+**/
 	router.route('/items/:id')
 
-	// get the item with that id (accessed at GET http://localhost:8080/api/items/:id)
+/***
+	GET ITEMS BY ID
+	- GET api/v1/items/:ID
+	- Accepts comma separated list of IDs
+**/
 	.get(function(req, res) {
 		var ids = req.params.id.split(",");
 
@@ -98,11 +110,13 @@ router.get('/', function(req, res) {
 			res.json(items);
 		});
 	})
-	
-	// update the item with this id (accessed at PUT http://localhost:8080/api/items/:id)
+
+/***
+	UPDATE SINGLE ITEM BY ID
+	- PUT api/v1/items/:ID
+**/
 	.put(function(req, res) {
 
-		// use our bear model to find the bear we want
 		Book.findById(req.params.id, function(err, item) {
 
 			if (err)
@@ -124,8 +138,12 @@ router.get('/', function(req, res) {
 
 		});
 	})
-	
-	// delete the item with this id (accessed at DELETE http://localhost:8080/api/items/:id)
+
+/***
+	DELETE ITEMS BY ID
+	- DELETE api/v1/items/:ID
+	- Accepts comma separated list of IDs
+**/
 	.delete(function(req, res) {
 		var ids = req.params.id.split(",");		
 
@@ -141,12 +159,11 @@ router.get('/', function(req, res) {
 			res.json(response);
 		});
 	});
-	
+
+
 // REGISTER OUR ROUTES -------------------------------
-// all of our routes will be prefixed with /api
-app.use('/api/v1', router);
+app.use('/api/v1', router); //add v1 prefix for all requests
 
 // START THE SERVER
-// =============================================================================
 app.listen(port);
 console.log('Magic happens on port ' + port);
