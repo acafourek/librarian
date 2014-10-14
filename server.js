@@ -65,7 +65,7 @@ router.get('/', function(req, res) {
 		// save the item and check for errors
 		item.save(function(err) {
 			if (err)
-				res.send(err);
+				res.send({message: 'There was an error.','error':err });
 
 			res.json({ message: 'Item created!' });
 			console.log(res.body);
@@ -108,7 +108,11 @@ router.get('/', function(req, res) {
 			if (err)
 				res.send(err);
 
-			item.title = req.body.title; 	// update the item info
+			for(var key in req.body) { 		//iterate through the call and build the item record
+			   if (req.body.hasOwnProperty(key)) {
+			   		item[key] = req.body[key];
+			   }
+			}	// update the item info
 
 			// save the bear
 			item.save(function(err) {
