@@ -47,8 +47,10 @@ router.get('/', function(req, res) {
 	res.json({ message: 'hooray! welcome to our api!' });	
 });
 
-	//API METHODS FOR GENERAL ITEMS
+
+//API METHODS FOR GENERAL ITEMS
 	router.route('/items')
+//=============================
 
 /***
 	CREATE ITEM
@@ -89,9 +91,9 @@ router.get('/', function(req, res) {
 		});
 	});
 	
-/***
-	SINGLE ITEMS
-**/
+
+//SINGLE ITEMS
+//=============================
 	router.route('/items/:id')
 
 /***
@@ -160,6 +162,10 @@ router.get('/', function(req, res) {
 		});
 	});
 
+
+//API METHODS FOR BUILDING METADATA PROFILE
+	router.route('/items')
+//=============================
 
 // REGISTER OUR ROUTES -------------------------------
 app.use('/api/v1', router); //add v1 prefix for all requests
